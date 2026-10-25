@@ -1,21 +1,82 @@
-<section class="hero">
-  <h1>Handmade plaid, made with love.</h1>
-  <p>Small-batch apparel & accessories crafted for people who love soft, aesthetic details.</p>
-  <button class="btn" onclick="window.loadPage('order')">Shop the collection</button>
-</section>
+<section class="page">
 
-<section class="reviews-section">
-  <h2 class="section-title">What customers say</h2>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <p>“The quality is amazing! The pink plaid skirt is so cute and the fit is perfect.”</p>
-      <div class="reviewer">— Mia, Verified Buyer</div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="section-title">Handmade in the Philippines</div>
+    <h1>Handmade plaid, made with love.</h1>
+    <p>Small-batch plaid apparel, accessories & pretty things — crafted for people who love soft, aesthetic details.</p>
+    <button class="btn" onclick="window.loadPage('order')">Shop the collection</button>
+  </div>
+
+  <!-- ANNOUNCEMENTS -->
+  <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #fff; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
+    <div class="section-title">📢 Announcements</div>
+    <p><strong>New booth at SM Fairview this weekend!</strong> Come visit for exclusive discounts and free stickers.</p>
+    <p class="mt-2" style="color:#8a6a72;">📦 Fresh plaid sets just dropped — limited stock. Order online or pick up in-store.</p>
+  </div>
+
+  <!-- SHOP PREVIEW -->
+  <div class="section-title">Shop</div>
+  <h2 class="section-heading">New Arrivals</h2>
+  <div class="product-grid" id="homeNewProducts">
+    <!-- JS injects products here -->
+  </div>
+
+  <!-- FEATURE STRIP -->
+  <div class="features">
+    <div class="feature">
+      <i class="fas fa-heart"></i>
+      <h4>Handmade with Love</h4>
+      <p>Every piece is sewn and finished by hand, one at a time.</p>
     </div>
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <p>“Super aesthetic packaging, you can feel the love. Thank you!”</p>
-      <div class="reviewer">— Bianca, Verified Buyer</div>
+    <div class="feature">
+      <i class="fas fa-star"></i>
+      <h4>Small-Batch Quality</h4>
+      <p>Limited runs mean more attention to detail on every item.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-tag"></i>
+      <h4>Fair Prices</h4>
+      <p>Lowest prices exclusively on our website, always.</p>
     </div>
   </div>
+
+  <!-- REVIEWS -->
+  <div class="reviews-section">
+    <div class="section-title">Reviews</div>
+    <h2 class="section-heading">What customers say</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>“The quality is amazing! The pink plaid skirt is so cute and the fit is perfect.”</p>
+        <div class="reviewer">— Mia, Verified Buyer</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>“Fast reply and very accommodating. Picked up at SM Fairview, smooth transaction!”</p>
+        <div class="reviewer">— Jasmine, Verified Buyer</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>“Love the scrunchies! Will order again. The GCash payment was easy.”</p>
+        <div class="reviewer">— Cha, Verified Buyer</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>“Super aesthetic packaging, you can feel the love. Thank you!”</p>
+        <div class="reviewer">— Bianca, Verified Buyer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOTH PHOTOS -->
+  <div class="section-title" style="margin-top: 60px;">Behind the booth</div>
+  <h2 class="section-heading">Recent booths</h2>
+  <div style="display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 24px; scroll-snap-type: x mandatory;">
+    <img src="https://placehold.co/400x400/f9ecec/8a6a72?text=SM+Fairview" style="width: 240px; height: 240px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brand-border); flex-shrink: 0;" alt="SM Fairview">
+    <img src="https://placehold.co/400x400/f5dede/8a6a72?text=SM+Caloocan" style="width: 240px; height: 240px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brand-border); flex-shrink: 0;" alt="SM Caloocan">
+    <img src="https://placehold.co/400x400/f9ecec/8a6a72?text=November+Bazaar" style="width: 240px; height: 240px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brand-border); flex-shrink: 0;" alt="Bazaar">
+    <img src="https://placehold.co/400x400/f5dede/8a6a72?text=Plaid+Corner" style="width: 240px; height: 240px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brand-border); flex-shrink: 0;" alt="Plaid Corner">
+  </div>
+
 </section>

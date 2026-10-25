@@ -6,17 +6,18 @@ async function loadPage(pageId) {
     const html = await res.text();
     mainContainer.innerHTML = html;
 
+    // Update active nav link
     document.querySelectorAll('nav a').forEach(a => {
       a.classList.toggle('active', a.dataset.page === pageId);
     });
 
+    // Run page-specific initialization logic
     const initFn = window[`init_${pageId.replace('-', '_')}`];
     if (typeof initFn === 'function') initFn();
     
     window.scrollTo(0, 0);
-
   } catch (err) {
-    mainContainer.innerHTML = `<h2 style="text-align:center; padding: 50px;">Error loading page. If you are opening this file directly, please use a local server (like VS Code Live Server).</h2>`;
+    mainContainer.innerHTML = `<h2 style="text-align:center; padding: 50px;">Error loading page. Please use a local server.</h2>`;
     console.error(err);
   }
 }
