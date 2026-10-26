@@ -17,7 +17,7 @@ window.showToast = function(message, isError = false) {
   setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 };
 
-// --- DYNAMIC HEADER (Centered Logo Style) ---
+// --- DYNAMIC HEADER (Fixed Spacing & Logo) ---
 function renderHeader() {
   const header = document.getElementById('appHeader');
   if (!header) return;
@@ -27,28 +27,33 @@ function renderHeader() {
 
   header.innerHTML = `
     <div class="container nav-bar">
-      <div class="nav-left"></div>
-      
-      <div class="nav-center logo-area" onclick="window.loadPage('home')" style="cursor: pointer;">
+      <!-- LEFT: Logo & Name -->
+      <div class="nav-left" onclick="window.loadPage('home')" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+        <div class="logo-placeholder">
+          <i class="fas fa-image"></i> LOGO
+        </div>
         <span class="logo-text">Ambyarns</span>
       </div>
 
-      <div class="nav-right">
+      <!-- CENTER: Navigation Links -->
+      <div class="nav-center">
         <nav>
           <ul>
             <li><a href="#" data-page="home">Home</a></li>
             <li><a href="#" data-page="order">Shop</a></li>
             <li><a href="#" data-page="about">Our Story</a></li>
             ${adminHtml}
-            <li><span onclick="window.openAuthPage()" style="cursor: pointer; font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--brand-primary);">${authText}</span></li>
-            <li>
-              <div class="cart-icon-wrapper" onclick="window.loadPage('cart')" style="cursor: pointer; position: relative; font-size: 1.1rem;">
-                <i class="fas fa-shopping-bag"></i>
-                <span id="cartBadge" class="notification-badge" style="display:none; position: absolute; top: -8px; right: -12px;">0</span>
-              </div>
-            </li>
           </ul>
         </nav>
+      </div>
+
+      <!-- RIGHT: Login & Cart -->
+      <div class="nav-right">
+        <span onclick="window.openAuthPage()" style="cursor: pointer; font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--brand-primary); margin-right: 16px;">${authText}</span>
+        <div class="cart-icon-wrapper" onclick="window.loadPage('cart')" style="cursor: pointer; position: relative; font-size: 1.2rem; color: var(--brand-dark);">
+          <i class="fas fa-shopping-bag"></i>
+          <span id="cartBadge" class="notification-badge" style="display:none; position: absolute; top: -8px; right: -12px;">0</span>
+        </div>
       </div>
     </div>
   `;
