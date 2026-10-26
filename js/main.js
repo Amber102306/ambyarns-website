@@ -1,25 +1,87 @@
-async function loadPage(pageId) {
+const pageTemplates = {
+  home: `
+    <section class="hero">
+      <div class="section-title">Handmade in the Philippines</div>
+      <h1>Handmade plaid, made with love.</h1>
+      <p>Small-batch plaid apparel, accessories & pretty things — crafted for people who love soft, aesthetic details.</p>
+      <button class="btn" onclick="window.loadPage('order')">Shop the collection</button>
+    </section>
+    <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #fff; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
+      <div class="section-title">📢 Announcements</div>
+      <p><strong>New booth at SM Fairview this weekend!</strong> Come visit for exclusive discounts and free stickers.</p>
+      <p class="mt-2" style="color:#8a6a72;">📦 Fresh plaid sets just dropped — limited stock. Order online or pick up in-store.</p>
+    </div>
+    <div class="section-title">Shop</div>
+    <h2 class="section-heading">New Arrivals</h2>
+    <div class="product-grid" id="homeNewProducts"></div>
+    <div class="features">
+      <div class="feature"><i class="fas fa-heart"></i><h4>Handmade with Love</h4><p>Every piece is sewn and finished by hand, one at a time.</p></div>
+      <div class="feature"><i class="fas fa-star"></i><h4>Small-Batch Quality</h4><p>Limited runs mean more attention to detail on every item.</p></div>
+      <div class="feature"><i class="fas fa-tag"></i><h4>Fair Prices</h4><p>Lowest prices exclusively on our website, always.</p></div>
+    </div>
+    <div class="reviews-section">
+      <div class="section-title">Reviews</div>
+      <h2 class="section-heading">What customers say</h2>
+      <div class="reviews-grid">
+        <div class="review-card"><div class="stars">★★★★★</div><p>“The quality is amazing! The pink plaid skirt is so cute and the fit is perfect.”</p><div class="reviewer">— Mia, Verified Buyer</div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><p>“Super aesthetic packaging, you can feel the love. Thank you!”</p><div class="reviewer">— Bianca, Verified Buyer</div></div>
+      </div>
+    </div>
+  `,
+  order: `
+    <section class="hero" style="padding: 40px 0;"><h1>Shop the Collection</h1></section>
+    <div class="product-grid" id="productList"></div>
+    <div id="productDetail" style="margin-top: 40px; display: none;"></div>
+  `,
+  cart: `
+    <section class="hero" style="padding: 40px 0 20px;"><h1>Your Shopping Bag</h1></section>
+    <div style="max-width: 800px; margin: 0 auto 80px auto;">
+      <div id="cartItemsContainer"></div>
+      <div id="cartCheckoutArea" style="margin-top: 32px; text-align: right; display: none;">
+        <h3 style="margin-bottom: 16px;">Total: ₱<span id="cartTotal">0.00</span></h3>
+        <button class="btn" onclick="window.proceedToCheckout()">Proceed to Checkout</button>
+      </div>
+    </div>
+  `,
+  'order-process': `
+    <section class="hero" style="padding: 40px 0 20px;"><h1>Checkout</h1></section>
+    <div class="card" style="max-width: 700px; margin: 0 auto 80px auto; padding: 32px; background: #fff; border: 1px solid var(--brand-border);">
+      <div id="orderSummary"></div>
+      <form id="orderForm">
+        <div class="form-group"><label>Email or Facebook link</label><input type="text" id="contactInfo" required></div>
+        <div class="form-group"><label>Payment method</label><div class="radio-group"><label><input type="radio" name="payment" value="cash" checked> Cash</label><label><input type="radio" name="payment" value="gcash"> GCash</label></div></div>
+        <div id="gcashSection" style="display: none;"><div class="qr-placeholder"><i class="fas fa-qrcode"></i><p>Scan QR: <strong>0917 123 4567</strong></p></div><div class="form-group"><label>Ref Number</label><input type="text" id="gcashProof"></div></div>
+        <div class="form-group"><label>Pick-up place</label><select id="pickupPlace"><option>SM Fairview</option><option>SM Caloocan</option></select></div>
+        <div class="form-group"><label>Mode of receiving</label><div class="radio-group"><label><input type="radio" name="receiveMode" value="pickup" checked> Pick up</label><label><input type="radio" name="receiveMode" value="courier"> Courier</label></div></div>
+        <button type="submit" class="btn" style="width: 100%;">Place Order</button>
+      </form>
+    </div>
+  `,
+  about: `
+    <section class="hero" style="padding: 60px 0;"><h1>Hi, I'm the maker.</h1></section>
+    <div style="max-width: 800px; margin: 0 auto 80px auto; text-align: center;">
+      <p style="font-size: 1.1rem; color: var(--brand-muted); margin-bottom: 24px;">Ambyarns started in 2022 as a tiny passion project. Every piece is handmade with love in my small studio.</p>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--brand-primary);">Love, Ambyarns <i class="fas fa-heart"></i></div>
+    </div>
+  `,
+  admin: `
+    <section class="hero" style="padding: 40px 0 20px;"><h1>Admin Dashboard</h1></section>
+    <div id="adminOrders" style="max-width: 900px; margin: 0 auto 80px auto;"></div>
+  `
+};
+
+function loadPage(pageId) {
   const mainContainer = document.getElementById('mainContainer');
-  try {
-    const res = await fetch(`pages/${pageId}.html`);
-    if (!res.ok) throw new Error("Page not found");
-    const html = await res.text();
-    mainContainer.innerHTML = html;
+  mainContainer.innerHTML = pageTemplates[pageId] || '<h2>Page not found</h2>';
 
-    // Update active nav link
-    document.querySelectorAll('nav a').forEach(a => {
-      a.classList.toggle('active', a.dataset.page === pageId);
-    });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === pageId);
+  });
 
-    // Run page-specific initialization logic
-    const initFn = window[`init_${pageId.replace('-', '_')}`];
-    if (typeof initFn === 'function') initFn();
-    
-    window.scrollTo(0, 0);
-  } catch (err) {
-    mainContainer.innerHTML = `<h2 style="text-align:center; padding: 50px;">Error loading page. Please use a local server.</h2>`;
-    console.error(err);
-  }
+  const initFn = window[`init_${pageId.replace('-', '_')}`];
+  if (typeof initFn === 'function') initFn();
+  
+  window.scrollTo(0, 0);
 }
 
 document.querySelectorAll('nav a').forEach(link => {
