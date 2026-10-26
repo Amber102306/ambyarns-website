@@ -59,3 +59,12 @@ window.openProductModal = function() {
 };
 
 window.init_admin = init_admin;
+
+// Auto-redirect to admin if logged in user is the admin and refreshes
+window.addEventListener('firebaseReady', () => {
+  window.onAuthStateChanged(window.firebaseAuth, (user) => {
+    if (user && user.email === "bryce.udaundo@gmail.com" && window.location.hash === '#admin') {
+      window.loadPage('admin');
+    }
+  });
+});

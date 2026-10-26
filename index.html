@@ -24,11 +24,16 @@
   <!-- MAIN CONTENT -->
   <main class="container" id="mainContainer" style="min-height: 60vh;"></main>
 
-  <!-- FOOTER -->
+    <!-- FOOTER -->
   <footer>
-    <div class="container">
+    <div class="container" style="position: relative;">
       <div class="footer-brand">Ambyarns</div>
       <div class="footer-copy">© 2025 Ambyarns · All rights reserved</div>
+      
+      <!-- HIDDEN ADMIN HEART ICON -->
+      <div onclick="window.loadPage('login')" style="position: absolute; bottom: 0; right: 24px; cursor: pointer; color: var(--brand-border); transition: color 0.3s;" onmouseover="this.style.color='var(--brand-primary)'" onmouseout="this.style.color='var(--brand-border)'" title="Admin Login">
+        <i class="fas fa-heart" style="font-size: 1.2rem;"></i>
+      </div>
     </div>
   </footer>
 

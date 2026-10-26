@@ -68,10 +68,12 @@ function renderHeader() {
 // --- LOGIN / REGISTER LOGIC ---
 window.openAuthPage = function() {
   if (currentUser) {
-    window.firebaseSignOut(window.firebaseAuth).then(() => {
-      window.showToast("Logged out successfully");
-      window.loadPage('home');
-    });
+    if (confirm("Are you sure you want to log out?")) {
+      window.firebaseSignOut(window.firebaseAuth).then(() => {
+        window.showToast("Logged out successfully");
+        window.loadPage('home');
+      });
+    }
   } else {
     window.loadPage('login');
   }
@@ -82,9 +84,16 @@ window.handleLogin = async function(e) {
   const email = document.getElementById('authEmail').value;
   const password = document.getElementById('authPassword').value;
   try {
-    await window.firebaseSignIn(window.firebaseAuth, email, password);
-    window.showToast("Welcome back!");
-    window.loadPage('home');
+    const userCredential = await window.firebaseSignIn(window.firebaseAuth, email, password);
+    
+    // Check if it's YOUR email to grant admin access
+    if (userCredential.user.email === "bryce.udaundo@gmail.com") {
+      window.showToast("Welcome back, Admin!");
+      window.loadPage('admin');
+    } else {
+      window.showToast("Welcome back!");
+      window.loadPage('home');
+    }
   } catch (err) {
     window.showToast("Invalid email or password", true);
   }
@@ -191,8 +200,8 @@ const pageTemplates = {
   login: `
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; width: 100%;">
       <div style="background: #fff; padding: 48px; border-radius: 8px; width: 100%; max-width: 450px; border: 1px solid var(--brand-border); box-shadow: 0 12px 32px rgba(217, 139, 156, 0.15);">
-        <h2 style="text-align: center; margin-bottom: 8px; font-size: 2.2rem;">Admin Login</h2>
-        <p style="text-align: center; color: var(--brand-muted); margin-bottom: 32px; font-size: 0.95rem;">Log in to manage your orders</p>
+        <h2 style="text-align: center; margin-bottom: 8px; font-size: 2.2rem;">Welcome to Ambyarns</h2>
+        <p style="text-align: center; color: var(--brand-muted); margin-bottom: 32px; font-size: 0.95rem;">Log in to your account</p>
         
         <form onsubmit="window.handleLogin(event)">
           <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
@@ -202,16 +211,19 @@ const pageTemplates = {
 
         <div style="text-align: center; border-top: 1px solid var(--brand-border); padding-top: 20px;">
           <p style="font-size: 0.85rem; color: var(--brand-muted); margin-bottom: 8px;">Don't have an account?</p>
-          <button onclick="window.handleRegister()" style="background: none; border: none; color: var(--brand-primary); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: underline;">Create Admin Account</button>
+          <button onclick="window.handleRegister()" style="background: none; border: none; color: var(--brand-primary); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: underline;">Create a Customer Account</button>
         </div>
       </div>
     </div>
   `,
   
-  admin: `
+    admin: `
     <section class="hero" style="padding: 40px 0 20px;">
       <h1>Admin Dashboard</h1>
-      <button class="btn mt-2" onclick="window.openProductModal()">+ Add New Product</button>
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 16px;">
+        <button class="btn" onclick="window.openProductModal()">+ Add New Product</button>
+        <button class="btn" style="background: transparent; border: 1px solid var(--brand-dark); color: var(--brand-dark);" onclick="window.loadPage('home')">Back to Storefront</button>
+      </div>
     </section>
     <div class="kanban-board" id="kanbanBoard" style="padding: 0 24px;"></div>
   `
