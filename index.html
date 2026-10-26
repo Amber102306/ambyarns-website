@@ -4,50 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ambyarns · Handmade Plaid Goods</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <div class="announcement-bar">✨ FREE STICKER WITH EVERY ORDER OVER ₱500 · PICK UP AT SM FAIRVIEW & SM CALOOCAN ✨</div>
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="announcement-bar">
+    ✨ FREE STICKER WITH EVERY ORDER OVER ₱500 · PICK UP AT SM FAIRVIEW & SM CALOOCAN ✨
+  </div>
 
-  <header>
-    <div class="container nav-bar">
-      <div class="logo-area" onclick="window.loadPage('home')">
-        <div class="logo-placeholder">LOGO</div>
-        <span class="logo-text">Ambyarns</span>
-      </div>
+  <!-- HEADER (Built by JS to handle Admin hide/show) -->
+  <header id="appHeader"></header>
 
-      <nav>
-        <ul>
-          <li><a href="#" data-page="home" class="active">Home</a></li>
-          <li><a href="#" data-page="order">Shop</a></li>
-          <li><a href="#" data-page="about">Our Story</a></li>
-          <li id="adminNavLink" style="display: none;"><a href="#" data-page="admin">Admin</a></li>
-        </ul>
-      </nav>
-
-      <div style="display: flex; gap: 16px; align-items: center;">
-        <span id="authBtn" onclick="window.openAuthPage()" style="cursor: pointer; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-dark);">Log In</span>
-        <div class="cart-icon-wrapper" onclick="window.loadPage('cart')" style="cursor: pointer; position: relative; font-size: 1.2rem;">
-          <i class="fas fa-shopping-bag"></i>
-          <span id="cartBadge" class="notification-badge" style="display:none; position: absolute; top: -8px; right: -12px;">0</span>
-        </div>
-      </div>
-    </div>
-  </header>
-
+  <!-- MAIN CONTENT -->
   <main class="container" id="mainContainer" style="min-height: 60vh;"></main>
 
+  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-brand">Ambyarns</div>
-      <div class="footer-copy">© 2025 Ambyarns</div>
+      <div class="footer-copy">© 2025 Ambyarns · All rights reserved</div>
     </div>
   </footer>
 
-  <!-- FIREBASE SCRIPTS (Loaded first) -->
+  <!-- FIREBASE V10 SCRIPTS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -80,7 +65,6 @@
     window.onAuthStateChanged = onAuthStateChanged;
     window.firebaseSignOut = signOut;
 
-    // Tell the app Firebase is ready so it can load the home page
     window.dispatchEvent(new Event('firebaseReady'));
   </script>
 
