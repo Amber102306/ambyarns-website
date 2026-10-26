@@ -67,5 +67,18 @@
   <script src="js/order.js"></script>
   <script src="js/about.js"></script>
   <script src="js/admin.js"></script>
+
+<script>
+  // Allows pressing "Enter" on the password input to log in
+  document.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      const input = document.getElementById('adminPasswordInput');
+      if (document.activeElement === input) {
+        window.checkAdminPass();
+      }
+    }
+  });
+</script>
+
 </body>
 </html>

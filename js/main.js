@@ -1,3 +1,7 @@
+// Set your desired admin password here
+const ADMIN_PASSWORD = "ambyarns123"; 
+let isAdminLoggedIn = false;
+
 const pageTemplates = {
   home: `
     <section class="hero">
@@ -72,7 +76,31 @@ const pageTemplates = {
 
 function loadPage(pageId) {
   const mainContainer = document.getElementById('mainContainer');
+
+  // Check if they are trying to access Admin but aren't logged in
+  if (pageId === 'admin' && !isAdminLoggedIn) {
+    mainContainer.innerHTML = `
+      <div style="max-width: 400px; margin: 100px auto; padding: 40px; background: #fff; border: 1px solid var(--brand-border); border-radius: 4px; text-align: center;">
+        <i class="fas fa-lock" style="font-size: 2.5rem; color: var(--brand-primary); margin-bottom: 20px;"></i>
+        <h2 style="margin-bottom: 10px;">Admin Access</h2>
+        <p style="color: var(--brand-muted); margin-bottom: 24px; font-size: 0.9rem;">Please enter your password to view orders.</p>
+        <input type="password" id="adminPasswordInput" placeholder="Enter password" style="width: 100%; margin-bottom: 16px; text-align: center;">
+        <button class="btn" style="width: 100%;" onclick="window.checkAdminPass()">Login</button>
+        <p id="loginError" style="color: #d9534f; font-size: 0.85rem; margin-top: 12px; display: none;">Incorrect password</p>
+      </div>
+    `;
+    return; // Stop loading the rest of the page
+  }
+
   mainContainer.innerHTML = pageTemplates[pageId] || '<h2>Page not found</h2>';
+
+  // Add a logout button if they are on the admin page
+  if (pageId === 'admin' && isAdminLoggedIn) {
+    const logoutBtn = document.createElement('div');
+    logoutBtn.style.cssText = 'text-align: center; margin-bottom: 32px;';
+    logoutBtn.innerHTML = `<button class="btn" style="background: transparent; color: #d9534f; border: 1px solid #d9534f;" onclick="window.adminLogout()">Log Out</button>`;
+    mainContainer.prepend(logoutBtn);
+  }
 
   document.querySelectorAll('nav a').forEach(a => {
     a.classList.toggle('active', a.dataset.page === pageId);
@@ -84,25 +112,27 @@ function loadPage(pageId) {
   window.scrollTo(0, 0);
 }
 
+window.checkAdminPass = function() {
+  const input = document.getElementById('adminPasswordInput').value;
+  if (input === ADMIN_PASSWORD) {
+    isAdminLoggedIn = true;
+    loadPage('admin');
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+};
+
+window.adminLogout = function() {
+  isAdminLoggedIn = false;
+  loadPage('home');
+};
+
 document.querySelectorAll('nav a').forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
-    
-    const pageId = link.dataset.page;
-
-    // 1. Check if they clicked Admin
-    if (pageId === 'admin') {
-      // 2. Ask for the password
-      const password = prompt("Enter Admin Password:");
-      
-      // 3. Set your password here (Change 'ambyarns123' to whatever you want)
-      if (password !== 'AmbyIsGreatfull1023') {
-        alert("❌ Incorrect password. Access denied.");
-        return; // Stop loading the page
-      }
-    }
-
-    // 4. If password is correct (or they clicked another page), load it
-    loadPage(pageId);
+    loadPage(link.dataset.page);
   });
 });
+
+window.loadPage = loadPage;
+document.addEventListener('DOMContentLoaded', () => loadPage('home'));
