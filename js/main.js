@@ -87,9 +87,22 @@ function loadPage(pageId) {
 document.querySelectorAll('nav a').forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
-    loadPage(link.dataset.page);
+    
+    const pageId = link.dataset.page;
+
+    // 1. Check if they clicked Admin
+    if (pageId === 'admin') {
+      // 2. Ask for the password
+      const password = prompt("Enter Admin Password:");
+      
+      // 3. Set your password here (Change 'ambyarns123' to whatever you want)
+      if (password !== 'AmbyIsGreatfull1023') {
+        alert("❌ Incorrect password. Access denied.");
+        return; // Stop loading the page
+      }
+    }
+
+    // 4. If password is correct (or they clicked another page), load it
+    loadPage(pageId);
   });
 });
-
-window.loadPage = loadPage;
-document.addEventListener('DOMContentLoaded', () => loadPage('home'));
