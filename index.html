@@ -80,5 +80,31 @@
   });
 </script>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // PASTE YOUR CONFIG HERE
+  const firebaseConfig = {
+    apiKey: "AIzaSyCq4DN9z1nbCyijIVv0s0RIl62zRBkCGOQ",
+    authDomain: "ambyarns-website.firebaseapp.com",
+    projectId: "ambyarns-website",
+    storageBucket: "ambyarns-website.firebasestorage.app",
+    messagingSenderId: "892693177901",
+    appId: "1:892693177901:web:10208712af60222246faa4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Make them global so order.js and admin.js can use them
+  window.firebaseDB = db;
+  window.firebaseCollection = collection;
+  window.firebaseAddDoc = addDoc;
+  window.firebaseOnSnapshot = onSnapshot;
+  window.firebaseDoc = doc;
+  window.firebaseUpdateDoc = updateDoc;
+</script>
+
 </body>
 </html>

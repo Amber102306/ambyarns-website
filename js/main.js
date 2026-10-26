@@ -1,5 +1,5 @@
 // Set your desired admin password here
-const ADMIN_PASSWORD = "ambyarns123"; 
+const ADMIN_PASSWORD = "AmbyIsGreatfull1023"; 
 let isAdminLoggedIn = false;
 
 const pageTemplates = {
@@ -10,7 +10,7 @@ const pageTemplates = {
       <p>Cute keychains, accessories & pretty things — crafted for people who love soft, aesthetic things.</p>
       <button class="btn" onclick="window.loadPage('order')">Shop the collection</button>
     </section>
-    <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #ffd1d1; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
+    <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #ffc6e2; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
       <div class="section-title">📢 Announcements</div>
       <p><strong>New booth on November 4, at National University - Manila!</strong> Come visit for exclusive items and free stickers. ^^</p>
       <p class="mt-2" style="color:#8a6a72;">📦 New crocheted flowers just dropped — limited stock. Order online or pick up!</p>
