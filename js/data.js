@@ -1,7 +1,6 @@
-let products = []; // Start empty
+let products = [];
 
-// Fetch products from Firebase when app loads
-if (window.firebaseOnSnapshot) {
+window.addEventListener('firebaseReady', () => {
   window.firebaseOnSnapshot(window.firebaseCollection(window.firebaseDB, "products"), (snapshot) => {
     products = [];
     snapshot.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
@@ -16,11 +15,7 @@ if (window.firebaseOnSnapshot) {
       seedData.forEach(p => window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "products"), p));
     }
     window.products = products;
-    // Refresh shop view if user is currently on it
     if (document.getElementById('productList')) window.init_order();
     if (document.getElementById('homeNewProducts')) window.init_home();
   });
-}
-
-window.getOrders = () => []; // Handled in admin.js now
-window.setOrders = () => {}; // Handled in admin.js now
+});

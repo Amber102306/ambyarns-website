@@ -24,13 +24,12 @@
           <li><a href="#" data-page="home" class="active">Home</a></li>
           <li><a href="#" data-page="order">Shop</a></li>
           <li><a href="#" data-page="about">Our Story</a></li>
-          <!-- Admin link starts hidden -->
           <li id="adminNavLink" style="display: none;"><a href="#" data-page="admin">Admin</a></li>
         </ul>
       </nav>
 
       <div style="display: flex; gap: 16px; align-items: center;">
-        <span id="authBtn" onclick="window.openAuthModal()" style="cursor: pointer; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-dark);">Log In</span>
+        <span id="authBtn" onclick="window.openAuthPage()" style="cursor: pointer; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-dark);">Log In</span>
         <div class="cart-icon-wrapper" onclick="window.loadPage('cart')" style="cursor: pointer; position: relative; font-size: 1.2rem;">
           <i class="fas fa-shopping-bag"></i>
           <span id="cartBadge" class="notification-badge" style="display:none; position: absolute; top: -8px; right: -12px;">0</span>
@@ -39,23 +38,7 @@
     </div>
   </header>
 
-  <!-- LOGIN MODAL -->
-  <div id="authModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div style="background: #fff; padding: 32px; border-radius: 8px; width: 90%; max-width: 400px;">
-      <h2 style="margin-bottom: 24px;">Admin Login</h2>
-      <form onsubmit="window.handleLogin(event)">
-        <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
-        <div class="form-group"><label>Password</label><input type="password" id="authPassword" required></div>
-        <button type="submit" class="btn" style="width: 100%;">Log In</button>
-      </form>
-      <div style="text-align: center; margin-top: 16px;">
-        <a href="#" onclick="window.handleRegister()" style="font-size: 0.8rem; color: var(--brand-primary); text-decoration: underline;">Create an account</a>
-      </div>
-      <button onclick="document.getElementById('authModal').style.display='none'" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
-    </div>
-  </div>
-
-  <main class="container" id="mainContainer"></main>
+  <main class="container" id="mainContainer" style="min-height: 60vh;"></main>
 
   <footer>
     <div class="container">
@@ -64,20 +47,20 @@
     </div>
   </footer>
 
-  <!-- FIREBASE V10 SCRIPTS -->
+  <!-- FIREBASE SCRIPTS (Loaded first) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // PASTE YOUR CONFIG HERE
+    // PASTE YOUR FIREBASE CONFIG HERE
     const firebaseConfig = {
-      apiKey: "AIzaSy...",
-      authDomain: "ambyarns-website.firebaseapp.com",
-      projectId: "ambyarns-website",
-      storageBucket: "ambyarns-website.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -96,6 +79,9 @@
     window.firebaseCreateUser = createUserWithEmailAndPassword;
     window.onAuthStateChanged = onAuthStateChanged;
     window.firebaseSignOut = signOut;
+
+    // Tell the app Firebase is ready so it can load the home page
+    window.dispatchEvent(new Event('firebaseReady'));
   </script>
 
   <script src="js/data.js"></script>
