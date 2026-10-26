@@ -1,19 +1,26 @@
-const products = [
-  { id: 1, name: 'Plaid Mini Skirt', price: 549, colors: ['#ffb6c1', '#b0e0e6', '#d3d3d3'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Plaid+Skirt' },
-  { id: 2, name: 'Plaid Scrunchies (3pc)', price: 199, colors: ['#ffb6c1', '#f4c2c2', '#e6e6fa'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Scrunchies' },
-  { id: 3, name: 'Oversized Plaid Blazer', price: 899, colors: ['#ffb6c1', '#a95c84', '#000000'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Blazer' },
-  { id: 4, name: 'Plaid Tote Bag', price: 349, colors: ['#ffb6c1', '#c8a2c8', '#f5f5dc'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Tote+Bag' }
-];
+let products = []; // Start empty
 
-let orders = JSON.parse(localStorage.getItem('ambyarnsOrders')) || [
-  { id: 'AMB-0001', customer: 'demo@example.com', items: 'Plaid Mini Skirt', total: 549, status: 'Pending', payment: 'gcash', receiveMode: 'pickup', pickupPlace: 'SM Fairview' }
-];
-
-function saveOrders() {
-  localStorage.setItem('ambyarnsOrders', JSON.stringify(orders));
-  if (typeof updateAdminBadge === 'function') updateAdminBadge();
+// Fetch products from Firebase when app loads
+if (window.firebaseOnSnapshot) {
+  window.firebaseOnSnapshot(window.firebaseCollection(window.firebaseDB, "products"), (snapshot) => {
+    products = [];
+    snapshot.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
+    
+    // If database is empty on first load, add dummy products
+    if (products.length === 0 && !localStorage.getItem('seeded')) {
+      localStorage.setItem('seeded', 'true');
+      const seedData = [
+        { name: 'Plaid Mini Skirt', price: 549, colors: ['#ffb6c1', '#b0e0e6'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Skirt' },
+        { name: 'Plaid Scrunchies', price: 199, colors: ['#ffb6c1'], image: 'https://placehold.co/600x600/f9ecec/8a6a72?text=Scrunchies' }
+      ];
+      seedData.forEach(p => window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "products"), p));
+    }
+    window.products = products;
+    // Refresh shop view if user is currently on it
+    if (document.getElementById('productList')) window.init_order();
+    if (document.getElementById('homeNewProducts')) window.init_home();
+  });
 }
 
-window.products = products;
-window.getOrders = () => orders;
-window.setOrders = (newOrders) => { orders = newOrders; saveOrders(); };
+window.getOrders = () => []; // Handled in admin.js now
+window.setOrders = () => {}; // Handled in admin.js now

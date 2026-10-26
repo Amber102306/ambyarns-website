@@ -1,57 +1,61 @@
 function init_admin() {
-  renderAdminOrders();
-  updateAdminBadge();
-}
-
-function renderAdminOrders() {
-  const container = document.getElementById('adminOrders');
-  if (!container) return;
-  const orders = window.getOrders();
+  const board = document.getElementById('kanbanBoard');
+  if (!board) return;
   
-  if (orders.length === 0) {
-    container.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--brand-muted);"><i class="fas fa-box-open" style="font-size: 3rem; color: var(--brand-border); margin-bottom: 16px;"></i><p>No orders yet. When a customer checks out, they will appear here.</p></div>`;
-    return;
-  }
+  board.innerHTML = '<p>Loading live orders...</p>';
 
-  container.innerHTML = orders.map(order => `
-    <div class="order-card">
-      <div>
-        <h4 style="margin-bottom: 4px; font-family: 'Inter', sans-serif;">${order.id} · ${order.items}</h4>
-        <p style="font-size: 0.9rem; color: var(--brand-muted);"><strong>Customer:</strong> ${order.customer} <br><strong>Total:</strong> ₱${order.total.toFixed(2)} <br><strong>Method:</strong> ${order.payment === 'gcash' ? 'GCash' : 'Cash'} · ${order.receiveMode === 'pickup' ? `Pick up at ${order.pickupPlace}` : 'Courier Delivery'}</p>
+  window.firebaseOnSnapshot(window.firebaseCollection(window.firebaseDB, "orders"), (snapshot) => {
+    const orders = [];
+    snapshot.forEach((doc) => orders.push({ firebaseId: doc.id, ...doc.data() }));
+
+    const columns = {
+      'Pending': [], 'Processing': [], 'Ready for pick up': [], 'Shipped': [], 'Completed': []
+    };
+    orders.forEach(o => { if(columns[o.status]) columns[o.status].push(o); });
+
+    board.innerHTML = Object.keys(columns).map(status => `
+      <div class="kanban-col">
+        <h3>${status} (${columns[status].length})</h3>
+        ${columns[status].map(order => `
+          <div class="order-card">
+            <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">${order.id}</div>
+            <div style="font-size: 0.85rem; color: var(--brand-muted); margin-bottom: 8px;">
+              <strong>${order.customer}</strong><br>
+              ${order.items}<br>
+              ₱${order.total.toFixed(2)}<br>
+              ${order.receiveMode === 'pickup' ? `📍 ${order.pickupPlace}` : `🚚 ${order.courierAddress}`}
+            </div>
+            <select onchange="window.updateOrderStatus('${order.firebaseId}', this.value)" style="width:100%;">
+              ${Object.keys(columns).map(s => `<option value="${s}" ${order.status === s ? 'selected' : ''}>Move to ${s}</option>`).join('')}
+            </select>
+          </div>
+        `).join('') || '<p style="font-size:0.8rem; text-align:center; color:#aaa;">Empty</p>'}
       </div>
-      <div style="text-align: right;">
-        <span class="status-badge" style="display: block; margin-bottom: 12px;">${order.status}</span>
-        <select onchange="window.updateOrderStatus('${order.id}', this.value)" style="padding: 8px 12px; border-radius: 4px; border: 1px solid var(--brand-border);">
-          <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-          <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>Processing</option>
-          <option value="Ready for pick up" ${order.status === 'Ready for pick up' ? 'selected' : ''}>Ready for pick up</option>
-          <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
-          <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
-        </select>
-      </div>
-    </div>`).join('');
+    `).join('');
+  });
 }
 
-function updateAdminBadge() {
-  const badge = document.getElementById('adminNotif');
-  if (!badge) return;
-  const pendingCount = window.getOrders().filter(o => o.status === 'Pending').length;
-  badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
-  badge.textContent = pendingCount;
-}
+window.updateOrderStatus = async function(firebaseId, newStatus) {
+  try {
+    const orderRef = window.firebaseDoc(window.firebaseDB, "orders", firebaseId);
+    await window.firebaseUpdateDoc(orderRef, { status: newStatus });
+    window.showToast(`Order moved to ${newStatus}`);
+  } catch (e) { window.showToast("Failed to update status", true); }
+};
 
-window.updateOrderStatus = function (orderId, newStatus) {
-  const orders = window.getOrders();
-  const order = orders.find(o => o.id === orderId);
-  if (order) {
-    order.status = newStatus;
-    window.setOrders(orders); 
-    renderAdminOrders();
-    updateAdminBadge();
-    if (newStatus === 'Ready for pick up') {
-      alert(`📧 EMAIL SIMULATION:\nSent to ${order.customer}:\n"Good news! Your order ${order.id} is ready for pick up at ${order.pickupPlace}."`);
-    }
-  }
+// --- ADD/DELETE PRODUCTS ---
+window.openProductModal = function() {
+  const name = prompt("Product Name:");
+  if (!name) return;
+  const price = parseFloat(prompt("Price (numbers only):"));
+  if (!price) return;
+  const image = prompt("Image URL (e.g., https://placehold.co/600x600):", "https://placehold.co/600x600/f9ecec/8a6a72?text=New+Item");
+
+  const newProduct = { id: Date.now().toString(), name, price, image, colors: ['#ffb6c1'] };
+  
+  window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "products"), newProduct)
+    .then(() => window.showToast("Product added to database!"))
+    .catch(e => window.showToast("Error adding product", true));
 };
 
 window.init_admin = init_admin;
