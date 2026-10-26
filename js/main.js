@@ -6,20 +6,20 @@ const pageTemplates = {
   home: `
     <section class="hero">
       <div class="section-title">Handmade in the Philippines</div>
-      <h1>Handmade plaid, made with love.</h1>
-      <p>Small-batch plaid apparel, accessories & pretty things — crafted for people who love soft, aesthetic details.</p>
+      <h1>Handmade crochet items, made with love.</h1>
+      <p>Cute keychains, accessories & pretty things — crafted for people who love soft, aesthetic things.</p>
       <button class="btn" onclick="window.loadPage('order')">Shop the collection</button>
     </section>
-    <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #fff; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
+    <div class="card" style="margin: 0 auto 40px; max-width: 800px; text-align: center; background: #ffd1d1; border: 1px solid var(--brand-border); padding: 32px; border-radius: 4px;">
       <div class="section-title">📢 Announcements</div>
-      <p><strong>New booth at SM Fairview this weekend!</strong> Come visit for exclusive discounts and free stickers.</p>
-      <p class="mt-2" style="color:#8a6a72;">📦 Fresh plaid sets just dropped — limited stock. Order online or pick up in-store.</p>
+      <p><strong>New booth on November 4, at National University - Manila!</strong> Come visit for exclusive items and free stickers. ^^</p>
+      <p class="mt-2" style="color:#8a6a72;">📦 New crocheted flowers just dropped — limited stock. Order online or pick up!</p>
     </div>
     <div class="section-title">Shop</div>
     <h2 class="section-heading">New Arrivals</h2>
     <div class="product-grid" id="homeNewProducts"></div>
     <div class="features">
-      <div class="feature"><i class="fas fa-heart"></i><h4>Handmade with Love</h4><p>Every piece is sewn and finished by hand, one at a time.</p></div>
+      <div class="feature"><i class="fas fa-heart"></i><h4>Handmade with Love</h4><p>Every piece is crocheted and finished by hand, one at a time.</p></div>
       <div class="feature"><i class="fas fa-star"></i><h4>Small-Batch Quality</h4><p>Limited runs mean more attention to detail on every item.</p></div>
       <div class="feature"><i class="fas fa-tag"></i><h4>Fair Prices</h4><p>Lowest prices exclusively on our website, always.</p></div>
     </div>
@@ -62,9 +62,9 @@ const pageTemplates = {
     </div>
   `,
   about: `
-    <section class="hero" style="padding: 60px 0;"><h1>Hi, I'm the maker.</h1></section>
+    <section class="hero" style="padding: 60px 0;"><h1>Hi, I'm Amber</h1></section>
     <div style="max-width: 800px; margin: 0 auto 80px auto; text-align: center;">
-      <p style="font-size: 1.1rem; color: var(--brand-muted); margin-bottom: 24px;">Ambyarns started in 2022 as a tiny passion project. Every piece is handmade with love in my small studio.</p>
+      <p style="font-size: 1.1rem; color: var(--brand-muted); margin-bottom: 24px;">Ambyarns started in November 1, 2025 as a tiny passion project. Every piece is handmade with love in my small room.</p>
       <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--brand-primary);">Love, Ambyarns <i class="fas fa-heart"></i></div>
     </div>
   `,
@@ -83,7 +83,7 @@ function loadPage(pageId) {
       <div style="max-width: 400px; margin: 100px auto; padding: 40px; background: #fff; border: 1px solid var(--brand-border); border-radius: 4px; text-align: center;">
         <i class="fas fa-lock" style="font-size: 2.5rem; color: var(--brand-primary); margin-bottom: 20px;"></i>
         <h2 style="margin-bottom: 10px;">Admin Access</h2>
-        <p style="color: var(--brand-muted); margin-bottom: 24px; font-size: 0.9rem;">Please enter your password to view orders.</p>
+        <p style="color: var(--brand-muted); margin-bottom: 24px; font-size: 0.9rem;">Only the admin can access this section.</p>
         <input type="password" id="adminPasswordInput" placeholder="Enter password" style="width: 100%; margin-bottom: 16px; text-align: center;">
         <button class="btn" style="width: 100%;" onclick="window.checkAdminPass()">Login</button>
         <p id="loginError" style="color: #d9534f; font-size: 0.85rem; margin-top: 12px; display: none;">Incorrect password</p>
